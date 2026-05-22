@@ -522,16 +522,10 @@ function generatePDF() {
   <script>window.onload=function(){window.print();};<\/script>
 </body></html>`;
 
-  // Descargar archivo HTML → abre el diálogo de impresión al abrirlo
-  const blob = new Blob([html], {type:"text/html;charset=utf-8"});
-  const url  = URL.createObjectURL(blob);
-  const a    = document.createElement("a");
-  a.href     = url;
-  a.download = `Receta_${(nombre||"Paciente").replace(/\s+/g,"_")}_${fecha.replace(/\//g,"-")}.html`;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
+  // Abrir en nueva pestaña y disparar impresión → guardar como PDF
+  const win = window.open("", "_blank");
+  win.document.write(html);
+  win.document.close();
 }
 
 /* ══ NUEVA RECETA ════════════════════════════════════════════ */
