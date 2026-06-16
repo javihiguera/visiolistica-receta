@@ -6,82 +6,34 @@
   <title>Generador de Receta · Visiolística</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      font-family: Arial, sans-serif;
-      background: #f4f1ee;
-      min-height: 100vh;
-      color: #1a1a1a;
-    }
+    body { font-family: Arial, sans-serif; background: #f4f1ee; min-height: 100vh; color: #1a1a1a; }
 
     /* ── PIN ── */
-    #pin-screen {
-      position: fixed;
-      inset: 0;
-      background: #f4f1ee;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      z-index: 9999;
-      padding: 24px;
-    }
+    #pin-screen { position: fixed; inset: 0; background: #f4f1ee; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9999; padding: 24px; }
     #pin-screen .logo { margin-bottom: 28px; }
-    #pin-card {
-      background: #fff;
-      border-radius: 16px;
-      padding: 32px 28px;
-      box-shadow: 0 4px 24px rgba(0,0,0,.10);
-      width: 100%;
-      max-width: 300px;
-      text-align: center;
-    }
+    #pin-card { background: #fff; border-radius: 16px; padding: 32px 28px; box-shadow: 0 4px 24px rgba(0,0,0,.10); width: 100%; max-width: 300px; text-align: center; }
     #pin-card h2 { font-size: 13px; color: #555; margin-bottom: 20px; font-weight: 500; }
     #pin-dots { display: flex; justify-content: center; gap: 14px; margin-bottom: 28px; }
-    .dot {
-      width: 14px; height: 14px; border-radius: 50%;
-      background: #ddd; transition: background .15s;
-    }
+    .dot { width: 14px; height: 14px; border-radius: 50%; background: #ddd; transition: background .15s; }
     .dot.filled { background: #3d1f0a; }
     .dot.error  { background: #c0392b; }
     #pin-error { font-size: 11px; color: #c0392b; margin-bottom: 12px; min-height: 16px; }
     #pin-keypad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
-    .key {
-      padding: 14px 0; border-radius: 10px;
-      border: 1px solid #ddd; background: #fff;
-      font-size: 18px; font-weight: 500; cursor: pointer;
-      transition: background .1s;
-    }
+    .key { padding: 14px 0; border-radius: 10px; border: 1px solid #ddd; background: #fff; font-size: 18px; font-weight: 500; cursor: pointer; transition: background .1s; }
     .key:hover { background: #f4f1ee; }
     .key.del { font-size: 14px; }
     .key.empty { visibility: hidden; cursor: default; }
     #pin-card p { margin-top: 20px; font-size: 11px; color: #aaa; }
-    @keyframes shake {
-      0%,100%{transform:translateX(0)}
-      20%{transform:translateX(-6px)} 40%{transform:translateX(6px)}
-      60%{transform:translateX(-4px)} 80%{transform:translateX(4px)}
-    }
+    @keyframes shake { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-6px)} 40%{transform:translateX(6px)} 60%{transform:translateX(-4px)} 80%{transform:translateX(4px)} }
     .shake { animation: shake .5s; }
 
     /* ── APP ── */
     #app { display: none; max-width: 780px; margin: 0 auto; padding: 24px 16px; }
     #app.visible { display: block; }
-
-    header {
-      display: flex; align-items: center; justify-content: space-between;
-      padding-bottom: 16px; margin-bottom: 22px;
-      border-bottom: 2px solid #ddd;
-      flex-wrap: wrap; gap: 10px;
-    }
+    header { display: flex; align-items: center; justify-content: space-between; padding-bottom: 16px; margin-bottom: 22px; border-bottom: 2px solid #ddd; flex-wrap: wrap; gap: 10px; }
     .header-actions { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
 
-    /* Botones generales */
-    .btn {
-      padding: 7px 12px; border-radius: 8px;
-      border: 1px solid #ccc; background: #f4f1ee;
-      color: #1a1a1a; font-size: 13px; cursor: pointer;
-      transition: background .1s, border-color .1s;
-    }
+    .btn { padding: 7px 12px; border-radius: 8px; border: 1px solid #ccc; background: #f4f1ee; color: #1a1a1a; font-size: 13px; cursor: pointer; transition: background .1s, border-color .1s; }
     .btn:hover { background: #ebe7e3; }
     .btn.active { border-color: #3d1f0a; font-weight: 600; }
     .btn.primary { background: #c0185a; color: #fff; border-color: #c0185a; font-weight: 600; padding: 9px 20px; }
@@ -90,72 +42,47 @@
     .btn.dark:hover { background: #2a1506; }
     .btn.logout { font-size: 11px; color: #999; padding: 5px 10px; }
 
-    /* Secciones */
-    .section {
-      border: 1px solid #ddd; border-radius: 10px;
-      padding: 14px; margin-bottom: 16px; background: #fff;
-    }
-    .section-title {
-      font-size: 11px; font-weight: 500; color: #c0185a;
-      text-transform: uppercase; letter-spacing: .06em; margin-bottom: 12px;
-    }
+    .section { border: 1px solid #ddd; border-radius: 10px; padding: 14px; margin-bottom: 16px; background: #fff; }
+    .section-title { font-size: 11px; font-weight: 500; color: #c0185a; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 12px; }
 
-    /* Nombre / fecha */
     .row-2 { display: flex; gap: 12px; margin-bottom: 18px; flex-wrap: wrap; }
     .row-2 .field { flex: 2; min-width: 180px; }
     .row-2 .field.short { flex: 1; min-width: 120px; }
     label { font-size: 11px; color: #888; text-transform: uppercase; letter-spacing: .04em; display: block; margin-bottom: 4px; }
-    input[type="text"], textarea {
-      width: 100%; padding: 7px 10px; border: 1px solid #ccc; border-radius: 8px;
-      font-size: 13px; background: #faf9f8; color: #1a1a1a; outline: none;
-    }
+    input[type="text"], textarea { width: 100%; padding: 7px 10px; border: 1px solid #ccc; border-radius: 8px; font-size: 13px; background: #faf9f8; color: #1a1a1a; outline: none; }
     input[type="text"]:focus, textarea:focus { border-color: #3d1f0a; }
 
-    /* Eye rows */
     .eye-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
     .eye-label { width: 30px; font-size: 12px; font-weight: 500; color: #555; flex-shrink: 0; }
     .field-group { display: flex; flex-direction: column; gap: 3px; }
     .field-group label { font-size: 10px; }
-    .field-group input {
-      width: 72px; text-align: center; padding: 5px 6px;
-      border: 1px solid #ccc; border-radius: 6px; font-size: 13px;
-      background: #faf9f8; color: #1a1a1a; outline: none;
-    }
+    .field-group input { width: 72px; text-align: center; padding: 5px 6px; border: 1px solid #ccc; border-radius: 6px; font-size: 13px; background: #faf9f8; color: #1a1a1a; outline: none; }
     .field-group input.small { width: 52px; }
     .field-group input:focus { border-color: #3d1f0a; }
 
-    /* Adición */
     .add-row { display: flex; gap: 20px; flex-wrap: wrap; }
-
-    /* Especificaciones / Uso */
     .spec-row { display: flex; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
     .spec-row .section { flex: 1; min-width: 200px; margin-bottom: 0; }
     .chips { display: flex; gap: 6px; flex-wrap: wrap; }
-    .chip {
-      padding: 5px 10px; border-radius: 8px; border: 1px solid #ccc;
-      background: #f4f1ee; font-size: 11px; cursor: pointer;
-      transition: background .1s, border-color .1s, color .1s;
-    }
+    .chip { padding: 5px 10px; border-radius: 8px; border: 1px solid #ccc; background: #f4f1ee; font-size: 11px; cursor: pointer; transition: background .1s, border-color .1s, color .1s; }
     .chip:hover { background: #ebe7e3; }
     .chip.active { background: #3d1f0a; color: #fff; border-color: #3d1f0a; }
 
-    /* Raw textarea */
     #raw-section textarea { font-family: monospace; font-size: 12px; resize: vertical; }
     .parse-row { display: flex; gap: 8px; align-items: center; margin-top: 10px; flex-wrap: wrap; }
     #parse-msg { font-size: 12px; color: #27ae60; }
 
-    /* Errores */
-    #errors {
-      display: none; margin-bottom: 16px; padding: 14px;
-      border: 1px solid #c0392b; border-radius: 10px; background: #fff5f5;
-    }
-    #errors .err-title { font-weight: 500; color: #c0392b; font-size: 13px; margin-bottom: 6px; }
-    #errors .err-item { font-size: 12px; color: #c0392b; margin-bottom: 3px; }
+    /* ── Ayuda visual ── */
+    .help-box { margin-top: 14px; padding: 12px 14px; background: #faf7f4; border: 1px dashed #d4c9be; border-radius: 8px; }
+    .help-box .help-title { font-size: 11px; font-weight: 600; color: #3d1f0a; margin-bottom: 10px; text-transform: uppercase; letter-spacing: .05em; }
+    .help-examples { display: flex; gap: 10px; flex-wrap: wrap; }
+    .help-example { font-family: monospace; font-size: 11px; color: #555; line-height: 1.8; background: #fff; padding: 8px 10px; border-radius: 6px; border: 1px solid #e8e0d8; white-space: pre; }
 
-    /* Acciones */
+    #errors { display: none; margin-bottom: 16px; padding: 14px; border: 1px solid #c0392b; border-radius: 10px; background: #fff5f5; }
+    #errors .err-title { font-weight: 500; color: #c0392b; font-size: 13px; margin-bottom: 6px; }
+    #errors .err-item  { font-size: 12px; color: #c0392b; margin-bottom: 3px; }
     .actions { display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap; }
 
-    /* Logo SVG inline */
     .logo-text { font-family: Georgia, serif; font-size: 34px; font-weight: 700; fill: #3d1f0a; letter-spacing: -1px; }
     .logo-sub  { font-family: Arial, sans-serif; font-size: 10px; fill: #c0185a; letter-spacing: 2.5px; }
 
@@ -195,7 +122,7 @@
     <div class="header-actions">
       <button class="btn logout" onclick="logout()">🔒 Cerrar sesión</button>
       <button class="btn active" id="btn-manual" onclick="setMode('manual')">Manual</button>
-      <button class="btn" id="btn-raw"    onclick="setMode('raw')">Entrada libre</button>
+      <button class="btn"        id="btn-raw"    onclick="setMode('raw')">Entrada libre</button>
     </div>
   </header>
 
@@ -230,12 +157,33 @@
   <!-- ENTRADA LIBRE -->
   <div id="raw-section" class="section" style="display:none;">
     <div class="section-title">Datos en bruto</div>
-    <div style="font-size:12px;color:#888;margin-bottom:8px;">O.D. en la primera línea · O.I. en la segunda</div>
-    <textarea id="raw-input" rows="4" placeholder="Ej:&#10;+1.50 -0.75 90° AV 0.9&#10;-0.25 -1.00 10° add 2.00"></textarea>
+    <div style="font-size:12px;color:#888;margin-bottom:8px;">O.D. primera línea · O.I. segunda línea · ADD al final</div>
+    <textarea id="raw-input" rows="5" placeholder="+1,50 -0,50cil 180º&#10;+1,25 -0,75cil 170º&#10;ADD 2,50"></textarea>
     <div class="parse-row">
       <button class="btn dark" onclick="doParse()">/generate — Parsear</button>
       <button class="btn" onclick="clearRaw()">Limpiar</button>
       <span id="parse-msg"></span>
+    </div>
+    <!-- Ayuda visual -->
+    <div class="help-box">
+      <div class="help-title">Formatos admitidos</div>
+      <div class="help-examples">
+        <div class="help-example">+1,50 -0,50cil 180º
++1,25 -0,75cil 170º
+ADD 2,50</div>
+        <div class="help-example">+1,50 -0,50cil 180º 5V INF
++1,25 -0,75cil 170º 3V SUP
+ADD 2,50/2,75</div>
+        <div class="help-example">COMP
++1,25 -0,75cil 170º
+ADD 2,50</div>
+        <div class="help-example">N
+-1,00 -0,50cil 90º
+ADD 2,50</div>
+        <div class="help-example">CERCA
++2,00
++2,25</div>
+      </div>
     </div>
   </div>
 
@@ -262,24 +210,26 @@
 </div>
 
 <script>
-/* ══ CONFIG ══════════════════════════════════════════════════ */
+/* ══ CONFIG ════════════════════════════════════════════════ */
 const PIN_CORRECT = "2580";
 const SPECS = ["MONOFOCAL","MONOFOCAL AVANZADO","BIFOCAL","PROGRESIVO"];
 const USOS  = ["CONSTANTE","LEJOS","CERCA"];
 const FIELDS = [
-  {id:"esferico",  label:"Esférico",   w:72},
-  {id:"cilindrico",label:"Cilíndrico", w:72},
-  {id:"eje",       label:"Eje",        w:52},
-  {id:"prisma",    label:"Prisma",     w:52},
-  {id:"base",      label:"Base",       w:72},
-  {id:"av",        label:"AV",         w:52},
+  {id:"esferico",   label:"Esférico",   w:72},
+  {id:"cilindrico", label:"Cilíndrico", w:72},
+  {id:"eje",        label:"Eje",        w:52},
+  {id:"prisma",     label:"Prisma",     w:52},
+  {id:"base",       label:"Base",       w:72},
+  {id:"av",         label:"AV",         w:52},
 ];
 
-let pinValue = "";
+/* ══ STATE ════════════════════════════════════════════════ */
+let pinValue     = "";
 let selectedSpec = "";
 let selectedUso  = "";
+let isCercaMode  = false;  // true cuando el parser detecta CERCA
 
-/* ══ PIN ══════════════════════════════════════════════════════ */
+/* ══ PIN ══════════════════════════════════════════════════ */
 function renderDots(error) {
   const cont = document.getElementById("pin-dots");
   cont.innerHTML = "";
@@ -306,7 +256,11 @@ function renderKeypad() {
 }
 
 function handlePin(k) {
-  if (k === "DEL") { pinValue = pinValue.slice(0,-1); document.getElementById("pin-error").textContent = ""; renderDots(false); return; }
+  if (k === "DEL") {
+    pinValue = pinValue.slice(0, -1);
+    document.getElementById("pin-error").textContent = "";
+    renderDots(false); return;
+  }
   pinValue += k;
   renderDots(false);
   if (pinValue.length === PIN_CORRECT.length) {
@@ -317,7 +271,11 @@ function handlePin(k) {
       document.getElementById("pin-error").textContent = "PIN incorrecto";
       const dots = document.getElementById("pin-dots");
       dots.classList.add("shake");
-      setTimeout(() => { pinValue = ""; renderDots(false); dots.classList.remove("shake"); document.getElementById("pin-error").textContent = ""; }, 600);
+      setTimeout(() => {
+        pinValue = ""; renderDots(false);
+        dots.classList.remove("shake");
+        document.getElementById("pin-error").textContent = "";
+      }, 600);
     }
   }
 }
@@ -336,7 +294,7 @@ function logout() {
   newReceta();
 }
 
-/* ══ EYE ROWS ════════════════════════════════════════════════ */
+/* ══ EYE ROWS ═════════════════════════════════════════════ */
 function buildEyeRow(containerId, prefix, labelText) {
   const row = document.getElementById(containerId);
   const lbl = document.createElement("div");
@@ -345,26 +303,25 @@ function buildEyeRow(containerId, prefix, labelText) {
   FIELDS.forEach(f => {
     const grp = document.createElement("div");
     grp.className = "field-group";
-    grp.innerHTML = `<label>${f.label}</label><input type="text" id="${prefix}-${f.id}" class="${f.w<=52?"small":""}" style="width:${f.w}px;" />`;
+    grp.innerHTML = `<label>${f.label}</label><input type="text" id="${prefix}-${f.id}" class="${f.w <= 52 ? "small" : ""}" style="width:${f.w}px;" />`;
     row.appendChild(grp);
   });
 }
 
-/* ══ MODO ════════════════════════════════════════════════════ */
+/* ══ MODO ══════════════════════════════════════════════════ */
 function setMode(m) {
-  document.getElementById("manual-section").style.display = m==="manual" ? "block" : "none";
-  document.getElementById("raw-section").style.display    = m==="raw"    ? "block" : "none";
-  document.getElementById("btn-manual").classList.toggle("active", m==="manual");
-  document.getElementById("btn-raw").classList.toggle("active", m==="raw");
+  document.getElementById("manual-section").style.display = m === "manual" ? "block" : "none";
+  document.getElementById("raw-section").style.display    = m === "raw"    ? "block" : "none";
+  document.getElementById("btn-manual").classList.toggle("active", m === "manual");
+  document.getElementById("btn-raw").classList.toggle("active",    m === "raw");
 }
 
-/* ══ CHIPS ═══════════════════════════════════════════════════ */
+/* ══ CHIPS ═════════════════════════════════════════════════ */
 function buildChips(containerId, items, getSelected, setSelected) {
   const cont = document.getElementById(containerId);
   items.forEach(item => {
     const c = document.createElement("button");
-    c.className = "chip";
-    c.textContent = item;
+    c.className = "chip"; c.textContent = item;
     c.addEventListener("click", () => {
       setSelected(getSelected() === item ? "" : item);
       refreshChips(containerId, items, getSelected);
@@ -373,50 +330,163 @@ function buildChips(containerId, items, getSelected, setSelected) {
   });
 }
 function refreshChips(containerId, items, getSelected) {
-  const chips = document.querySelectorAll(`#${containerId} .chip`);
-  chips.forEach((c,i) => c.classList.toggle("active", items[i] === getSelected()));
+  document.querySelectorAll(`#${containerId} .chip`)
+    .forEach((c, i) => c.classList.toggle("active", items[i] === getSelected()));
 }
 
-/* ══ PARSEO ══════════════════════════════════════════════════ */
-function parseRaw(text) {
-  const lines = text.trim().split("\n").map(l=>l.trim()).filter(Boolean);
-  const result = {ld:{},li:{},add_od:"",add_oi:""};
-  const empty = () => ({esferico:"",cilindrico:"",eje:"",prisma:"",base:"",av:""});
+/* ══ FASE 1: NORMALIZACIÓN ════════════════════════════════
+   Estandariza variantes de escritura antes del parseo.
+*/
+function normalizeInput(text) {
+  return text
+    .replace(/,/g, '.')                      // coma decimal → punto
+    .replace(/°/g, 'º')                      // normalizar símbolo grado
+    .replace(/\bNEUTRO\b/gi,     '0')        // NEUTRO → 0
+    .replace(/\bCOMPENSADOR\b/gi,'COMP')     // COMPENSADOR → COMP
+    .replace(/\bINFERIOR\b/gi,   'INF')      // nombres base prismática
+    .replace(/\bSUPERIOR\b/gi,   'SUP')
+    .replace(/\bDERECHA\b/gi,    'DCHA')
+    .replace(/\bIZQUIERDA\b/gi,  'IZQ')
+    .replace(/\bN\b/g,           '0');       // N solo → 0 (tras sustituciones anteriores)
+}
 
-  const parseEye = (line) => {
-    const eye = empty(); let rem = line;
-    const avM = rem.match(/\bAV\s*[:=]?\s*([\d.,\/]+)/i); if(avM){eye.av=avM[1];rem=rem.replace(avM[0],"");}
-    const ejeM = rem.match(/([\d.]+)\s*[°º]/); if(ejeM){eye.eje=ejeM[1];rem=rem.replace(ejeM[0],"");}
-    const bmap={binf:"Inferior",inf:"Inferior",bsup:"Superior",sup:"Superior",bn:"Nasal",bi:"Nasal",nasal:"Nasal",bo:"Temporal",temporal:"Temporal"};
-    const bM = rem.match(/\b(b(?:inf|sup|n|i|o)|inf|sup|nasal|temporal)\b/i); if(bM){eye.base=bmap[bM[1].toLowerCase()]||bM[1];rem=rem.replace(bM[0],"");}
-    const pM = rem.match(/\bPR(?:ISMA)?\s*[:=]?\s*([\d.,]+)/i); if(pM){eye.prisma=pM[1];rem=rem.replace(pM[0]," ");}
-    const cM = rem.match(/(?:CIL|C)\s*[:=]?\s*([+-]?[\d.,]+)/i); if(cM){eye.cilindrico=cM[1];rem=rem.replace(cM[0]," ");}
-    const nums=[...rem.matchAll(/([+-]?[\d.,]+)/g)].map(m=>m[1]).filter(n=>n!==eye.eje&&n!==eye.av&&n!==eye.prisma);
-    if(nums.length>=2&&!eye.cilindrico){eye.esferico=nums[0];eye.cilindrico=nums[1];}else if(nums.length>=1)eye.esferico=nums[0];
-    return eye;
-  };
+/* ══ FASE 2: PARSER CLÍNICO ═══════════════════════════════ */
 
-  const dataLines=[];
-  lines.forEach(l=>{
-    if(!l.match(/\badd\b/i)){dataLines.push(l);return;}
-    const nums=[...l.matchAll(/([+-]?[\d.,]+)/g)].map(m=>m[1]);
-    if(nums.length===2){result.add_od=nums[0];result.add_oi=nums[1];}
-    else if(nums.length===1&&!result.add_od)result.add_od=nums[0];
-  });
-  result.ld = dataLines[0] ? parseEye(dataLines[0]) : empty();
-  result.li = dataLines[1] ? parseEye(dataLines[1]) : empty();
+// Mapeo nombre base → grados
+const BASE_MAP = { INF:'270', SUP:'90', DCHA:'180', IZQ:'0' };
+
+// Objeto ojo vacío
+function emptyEye() {
+  return { esferico:'', cilindrico:'', eje:'', prisma:'', base:'', av:'' };
+}
+
+// Parsea una línea de ojo (orden clínico: ESFERA CIL EJE PRISMA BASE)
+function parseEyeLine(line) {
+  const eye = emptyEye();
+  let rem = line.trim();
+
+  // Caso especial: COMP en solitario
+  if (/^COMP$/i.test(rem)) { eye.esferico = 'COMP'; return eye; }
+
+  // 1. Extraer PRISMA: número + V (ej: 5V, 2.5V)
+  const prismaM = rem.match(/(\d+(?:\.\d+)?)V\b/i);
+  if (prismaM) {
+    eye.prisma = prismaM[1];
+    rem = rem.replace(prismaM[0], ' ').trim();
+  }
+
+  // 2. Extraer BASE con nombre (INF / SUP / DCHA / IZQ)
+  const baseNameM = rem.match(/\b(INF|SUP|DCHA|IZQ)\b/i);
+  if (baseNameM) {
+    eye.base = BASE_MAP[baseNameM[1].toUpperCase()];
+    rem = rem.replace(baseNameM[0], ' ').trim();
+  }
+
+  // 3. Extraer CILINDRO + EJE juntos: -0.50cil 180º / -0.50 cil 180
+  const cilEjeM = rem.match(/([+-]?\d+(?:\.\d+)?)\s*c(?:il)?\s+(\d+)(?:º)?/i);
+  if (cilEjeM) {
+    eye.cilindrico = cilEjeM[1];
+    eye.eje        = cilEjeM[2];
+    rem = rem.replace(cilEjeM[0], ' ').trim();
+  } else {
+    // CIL sin eje pegado
+    const cilM = rem.match(/([+-]?\d+(?:\.\d+)?)\s*c(?:il)?/i);
+    if (cilM) { eye.cilindrico = cilM[1]; rem = rem.replace(cilM[0], ' ').trim(); }
+    // EJE: primer número seguido de º
+    const ejeM = rem.match(/(\d+)º/);
+    if (ejeM) { eye.eje = ejeM[1]; rem = rem.replace(ejeM[0], ' ').trim(); }
+  }
+
+  // 4. BASE numérica (ej: 270º) — solo si hay prisma y base sin establecer
+  if (eye.prisma && !eye.base) {
+    const baseDegM = rem.match(/(\d+)º/);
+    if (baseDegM) { eye.base = baseDegM[1]; rem = rem.replace(baseDegM[0], ' ').trim(); }
+  }
+
+  // 5. ESFERA: primer número restante (con signo)
+  const esferaM = rem.match(/([+-]?\d+(?:\.\d+)?)/);
+  if (esferaM) eye.esferico = esferaM[1];
+
+  return eye;
+}
+
+// Parser principal de receta clínica
+function parseReceta(text) {
+  const normalized = normalizeInput(text);
+  const lines = normalized.trim().split('\n').map(l => l.trim()).filter(Boolean);
+
+  const result = { ld: emptyEye(), li: emptyEye(), add_od: '', add_oi: '', isCerca: false };
+
+  // Detectar CERCA
+  const cercaIdx = lines.findIndex(l => /^CERCA$/i.test(l));
+  if (cercaIdx !== -1) { result.isCerca = true; lines.splice(cercaIdx, 1); }
+
+  // Detectar ADD (soporta ADD 2.50 y ADD 2.50/2.75)
+  const addIdx = lines.findIndex(l => /^ADD\b/i.test(l));
+  if (addIdx !== -1) {
+    const addM = lines[addIdx].match(/ADD\s+([\d.]+)(?:\/([\d.]+))?/i);
+    if (addM) { result.add_od = addM[1]; result.add_oi = addM[2] || addM[1]; }
+    lines.splice(addIdx, 1);
+  }
+
+  // Parsear líneas de datos: OD primero, OI segundo
+  if (lines[0]) result.ld = parseEyeLine(lines[0]);
+  if (lines[1]) result.li = parseEyeLine(lines[1]);
+
   return result;
 }
 
+/* ══ FASE 3: VALIDACIÓN CLÍNICA ═══════════════════════════ */
+
+// Valida un ojo de forma independiente
+function validateEye(eye, label) {
+  const e = [];
+  if (eye.cilindrico && !eye.eje)   e.push(`${label}: Cilíndrico requiere EJE.`);
+  if (eye.eje && !eye.cilindrico)   e.push(`${label}: EJE requiere Cilíndrico.`);
+  if (eye.prisma && !eye.base)      e.push(`${label}: Prisma requiere BASE.`);
+  if (eye.base && !eye.prisma)      e.push(`${label}: BASE requiere Prisma.`);
+  if (eye.eje !== '' && (parseFloat(eye.eje) < 0 || parseFloat(eye.eje) > 180))
+    e.push(`${label}: EJE fuera de rango (0–180°).`);
+  if (eye.prisma !== '' && parseFloat(eye.prisma) <= 0)
+    e.push(`${label}: Prisma debe ser mayor que 0.`);
+  return e;
+}
+
+// Valida la adición
+function validateAdd(add_od, add_oi) {
+  const e = [];
+  if (add_od !== '' && parseFloat(add_od) <= 0) e.push('Add O.D. debe ser mayor que 0.');
+  if (add_oi !== '' && parseFloat(add_oi) <= 0) e.push('Add O.I. debe ser mayor que 0.');
+  return e;
+}
+
+/* ══ ACCIÓN: PARSEAR ══════════════════════════════════════ */
 function doParse() {
   const raw = document.getElementById("raw-input").value;
-  const p = parseRaw(raw);
-  const fill = (prefix, eye) => FIELDS.forEach(f => { const el=document.getElementById(`${prefix}-${f.id}`); if(el) el.value=eye[f.id]||""; });
-  fill("od", p.ld); fill("oi", p.li);
-  document.getElementById("add-od").value = p.add_od;
-  document.getElementById("add-oi").value = p.add_oi;
-  document.getElementById("parse-msg").textContent = "✓ Datos extraídos. Revisa y corrige si es necesario.";
-  setMode("manual");
+  if (!raw.trim()) return;
+
+  const parsed = parseReceta(raw);
+
+  // Rellenar campos de ojo en el formulario
+  const fill = (prefix, eye) =>
+    FIELDS.forEach(f => { const el = document.getElementById(`${prefix}-${f.id}`); if (el) el.value = eye[f.id] || ''; });
+  fill('od', parsed.ld);
+  fill('oi', parsed.li);
+
+  // Rellenar adición
+  document.getElementById('add-od').value = parsed.add_od;
+  document.getElementById('add-oi').value = parsed.add_oi;
+
+  // Gestionar modo CERCA
+  isCercaMode = parsed.isCerca;
+  if (parsed.isCerca) {
+    selectedUso = 'CERCA';
+    refreshChips('chips-uso', USOS, () => selectedUso);
+  }
+
+  document.getElementById('parse-msg').textContent = '✓ Datos extraídos. Revisa y corrige si es necesario.';
+  document.getElementById('errors').style.display = 'none';
+  setMode('manual');
 }
 
 function clearRaw() {
@@ -424,45 +494,46 @@ function clearRaw() {
   document.getElementById("parse-msg").textContent = "";
 }
 
-/* ══ VALIDACIÓN ══════════════════════════════════════════════ */
+/* ══ UTILIDADES ═══════════════════════════════════════════ */
 function getEye(prefix) {
-  const e={};
-  FIELDS.forEach(f=>{ e[f.id]=(document.getElementById(`${prefix}-${f.id}`)||{}).value||""; });
+  const e = {};
+  FIELDS.forEach(f => { e[f.id] = (document.getElementById(`${prefix}-${f.id}`) || {}).value || ''; });
   return e;
 }
 
-function validate(od, oi) {
-  const errors=[];
-  const check=(eye,label)=>{
-    if(eye.cilindrico&&!eye.eje) errors.push(`${label}: Cilíndrico sin EJE.`);
-    if(eye.eje&&!eye.cilindrico) errors.push(`${label}: EJE sin Cilíndrico.`);
-    if(eye.prisma&&!eye.base)   errors.push(`${label}: Prisma sin BASE.`);
-    if(eye.base&&!eye.prisma)   errors.push(`${label}: BASE sin Prisma.`);
-    if(eye.eje!==""&&(parseFloat(eye.eje)<0||parseFloat(eye.eje)>180)) errors.push(`${label}: EJE fuera de rango (0°–180°).`);
-  };
-  check(od,"O.D."); check(oi,"O.I."); return errors;
-}
-
 function showErrors(errs) {
-  const box=document.getElementById("errors");
-  if(!errs.length){box.style.display="none";return;}
-  box.style.display="block";
-  box.innerHTML=`<div class="err-title">⚠️ Clinical validation warning:</div>`+errs.map(e=>`<div class="err-item">• ${e}</div>`).join("");
+  const box = document.getElementById("errors");
+  if (!errs.length) { box.style.display = "none"; return; }
+  box.style.display = "block";
+  box.innerHTML = `<div class="err-title">⚠️ Clinical validation warning:</div>` +
+    errs.map(e => `<div class="err-item">• ${e}</div>`).join('');
 }
 
-/* ══ GENERAR PDF ═════════════════════════════════════════════ */
+/* ══ GENERAR PDF ══════════════════════════════════════════ */
 function generatePDF() {
   const od = getEye("od"), oi = getEye("oi");
-  const errs = validate(od, oi);
+  const add_od = document.getElementById("add-od").value;
+  const add_oi = document.getElementById("add-oi").value;
+
+  // Validación clínica completa
+  const errs = [...validateEye(od,'O.D.'), ...validateEye(oi,'O.I.'), ...validateAdd(add_od, add_oi)];
   showErrors(errs);
   if (errs.length) return;
 
-  const nombre  = document.getElementById("nombre").value;
-  const fecha   = document.getElementById("fecha").value || new Date().toLocaleDateString("es-ES");
-  const add_od  = document.getElementById("add-od").value;
-  const add_oi  = document.getElementById("add-oi").value;
+  const nombre = document.getElementById("nombre").value;
+  const fecha  = document.getElementById("fecha").value || new Date().toLocaleDateString("es-ES");
 
-  const chk = active => `<span style="display:inline-block;width:13px;height:13px;border:1.5px solid #3d1f0a;border-radius:2px;background:${active?"#3d1f0a":"transparent"};vertical-align:middle;margin-right:6px;"></span>`;
+  // Herencia de prisma/base en adición (cuando ADD existe)
+  const hasAdd      = add_od || add_oi;
+  const odAddPrisma = hasAdd && od.prisma ? od.prisma : '';
+  const odAddBase   = hasAdd && od.base   ? od.base   : '';
+  const oiAddPrisma = hasAdd && oi.prisma ? oi.prisma : '';
+  const oiAddBase   = hasAdd && oi.base   ? oi.base   : '';
+
+  // Etiqueta tabla: CERCA si fue detectado, LEJOS en caso contrario
+  const lejosLabel = isCercaMode ? 'CERCA' : 'LEJOS';
+
+  const chk = a => `<span style="display:inline-block;width:13px;height:13px;border:1.5px solid #3d1f0a;border-radius:2px;background:${a?"#3d1f0a":"transparent"};vertical-align:middle;margin-right:6px;"></span>`;
   const td  = v => `<td style="border:1px solid #aaa;padding:6px 10px;min-width:72px;font-size:13px;text-align:center;">${v||""}</td>`;
   const th  = v => `<th style="border:1px solid #aaa;padding:6px 10px;background:#ede8e3;font-size:12px;font-weight:700;color:#3d1f0a;">${v}</th>`;
   const lb  = v => `<td style="border:1px solid #aaa;padding:6px 10px;font-size:13px;font-weight:600;background:#f5f0ea;white-space:nowrap;color:#3d1f0a;">${v}</td>`;
@@ -495,10 +566,10 @@ function generatePDF() {
       ${["ESFÉRICO","CILÍNDRICO","EJE","PRISMA","BASE","AV"].map(th).join("")}
     </tr></thead>
     <tbody>
-      <tr>${lb("LEJOS")}${lb("O.D.")}${td(od.esferico)}${td(od.cilindrico)}${td(od.eje?od.eje+"°":"")}${td(od.prisma)}${td(od.base)}${td(od.av)}</tr>
+      <tr>${lb(lejosLabel)}${lb("O.D.")}${td(od.esferico)}${td(od.cilindrico)}${td(od.eje?od.eje+"°":"")}${td(od.prisma)}${td(od.base)}${td(od.av)}</tr>
       <tr><td style="border:1px solid #aaa;background:#f5f0ea;"></td>${lb("O.I.")}${td(oi.esferico)}${td(oi.cilindrico)}${td(oi.eje?oi.eje+"°":"")}${td(oi.prisma)}${td(oi.base)}${td(oi.av)}</tr>
-      <tr>${lb("ADICIÓN")}${lb("O.D.")}${td(add_od)}${td("")}${td("")}${td("")}${td("")}${td("")}</tr>
-      <tr><td style="border:1px solid #aaa;background:#f5f0ea;"></td>${lb("O.I.")}${td(add_oi)}${td("")}${td("")}${td("")}${td("")}${td("")}</tr>
+      <tr>${lb("ADICIÓN")}${lb("O.D.")}${td(add_od)}${td("")}${td("")}${td(odAddPrisma)}${td(odAddBase)}${td("")}</tr>
+      <tr><td style="border:1px solid #aaa;background:#f5f0ea;"></td>${lb("O.I.")}${td(add_oi)}${td("")}${td("")}${td(oiAddPrisma)}${td(oiAddBase)}${td("")}</tr>
     </tbody>
   </table>
   <div style="margin-bottom:16px;">
@@ -522,39 +593,38 @@ function generatePDF() {
   <script>window.onload=function(){window.print();};<\/script>
 </body></html>`;
 
-  // Abrir en nueva pestaña y disparar impresión → guardar como PDF
   const win = window.open("", "_blank");
   win.document.write(html);
   win.document.close();
 }
 
-/* ══ NUEVA RECETA ════════════════════════════════════════════ */
+/* ══ NUEVA RECETA ═════════════════════════════════════════ */
 function newReceta() {
   document.getElementById("nombre").value = "";
   document.getElementById("fecha").value  = new Date().toLocaleDateString("es-ES");
-  FIELDS.forEach(f=>{
-    const od=document.getElementById(`od-${f.id}`); if(od)od.value="";
-    const oi=document.getElementById(`oi-${f.id}`); if(oi)oi.value="";
+  FIELDS.forEach(f => {
+    const od = document.getElementById(`od-${f.id}`); if (od) od.value = "";
+    const oi = document.getElementById(`oi-${f.id}`); if (oi) oi.value = "";
   });
   document.getElementById("add-od").value = "";
   document.getElementById("add-oi").value = "";
   document.getElementById("raw-input").value = "";
   document.getElementById("parse-msg").textContent = "";
-  selectedSpec=""; selectedUso="";
-  refreshChips("chips-specs", SPECS, ()=>selectedSpec);
-  refreshChips("chips-uso",   USOS,  ()=>selectedUso);
-  document.getElementById("errors").style.display="none";
+  document.getElementById("errors").style.display = "none";
+  selectedSpec = ""; selectedUso = ""; isCercaMode = false;
+  refreshChips("chips-specs", SPECS, () => selectedSpec);
+  refreshChips("chips-uso",   USOS,  () => selectedUso);
   setMode("manual");
 }
 
-/* ══ INIT ════════════════════════════════════════════════════ */
+/* ══ INIT ══════════════════════════════════════════════════ */
 document.addEventListener("DOMContentLoaded", () => {
   renderDots(false);
   renderKeypad();
-  buildEyeRow("row-od","od","O.D.");
-  buildEyeRow("row-oi","oi","O.I.");
-  buildChips("chips-specs", SPECS, ()=>selectedSpec, v=>{ selectedSpec=v; });
-  buildChips("chips-uso",   USOS,  ()=>selectedUso,  v=>{ selectedUso=v;  });
+  buildEyeRow("row-od", "od", "O.D.");
+  buildEyeRow("row-oi", "oi", "O.I.");
+  buildChips("chips-specs", SPECS, () => selectedSpec, v => { selectedSpec = v; });
+  buildChips("chips-uso",   USOS,  () => selectedUso,  v => { selectedUso  = v; });
   document.getElementById("fecha").value = new Date().toLocaleDateString("es-ES");
 });
 </script>
