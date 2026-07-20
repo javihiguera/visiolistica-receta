@@ -28,8 +28,7 @@
     .shake { animation: shake .5s; }
 
     /* ── APP ── */
-    #app { display: none; max-width: 780px; margin: 0 auto; padding: 24px 16px; }
-    #app.visible { display: block; }
+    #app { display: block; max-width: 780px; margin: 0 auto; padding: 24px 16px; }
     header { display: flex; align-items: center; justify-content: space-between; padding-bottom: 16px; margin-bottom: 22px; border-bottom: 2px solid #ddd; flex-wrap: wrap; gap: 10px; }
     .header-actions { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
 
@@ -95,23 +94,6 @@
 </head>
 <body>
 
-<!-- ══ PIN ══════════════════════════════════════════════════ -->
-<div id="pin-screen">
-  <div class="logo">
-    <svg width="240" height="58" viewBox="0 0 300 72" xmlns="http://www.w3.org/2000/svg">
-      <text class="logo-text" x="0" y="48">VISIOLÍSTICA</text>
-      <text class="logo-sub"  x="2" y="66">TERAPIA VISUAL COMPORTAMENTAL</text>
-    </svg>
-  </div>
-  <div id="pin-card">
-    <h2>Acceso profesional</h2>
-    <div id="pin-dots"></div>
-    <div id="pin-error"></div>
-    <div id="pin-keypad"></div>
-    <p>Solo personal autorizado de Visiolística</p>
-  </div>
-</div>
-
 <!-- ══ APP ══════════════════════════════════════════════════ -->
 <div id="app">
   <header>
@@ -120,7 +102,6 @@
       <text class="logo-sub"  x="2" y="66">TERAPIA VISUAL COMPORTAMENTAL</text>
     </svg>
     <div class="header-actions">
-      <button class="btn logout" onclick="logout()">🔒 Cerrar sesión</button>
       <button class="btn active" id="btn-manual" onclick="setMode('manual')">Manual</button>
       <button class="btn"        id="btn-raw"    onclick="setMode('raw')">Entrada libre</button>
     </div>
@@ -211,7 +192,6 @@ ADD 2,50</div>
 
 <script>
 /* ══ CONFIG ════════════════════════════════════════════════ */
-const PIN_CORRECT = "2580";
 const SPECS = ["MONOFOCAL","MONOFOCAL AVANZADO","BIFOCAL","PROGRESIVO"];
 const USOS  = ["CONSTANTE","LEJOS","CERCA"];
 const FIELDS = [
@@ -224,75 +204,10 @@ const FIELDS = [
 ];
 
 /* ══ STATE ════════════════════════════════════════════════ */
-let pinValue     = "";
 let selectedSpec = "";
 let selectedUso  = "";
 let isCercaMode  = false;  // true cuando el parser detecta CERCA
 
-/* ══ PIN ══════════════════════════════════════════════════ */
-function renderDots(error) {
-  const cont = document.getElementById("pin-dots");
-  cont.innerHTML = "";
-  for (let i = 0; i < PIN_CORRECT.length; i++) {
-    const d = document.createElement("div");
-    d.className = "dot" + (i < pinValue.length ? (error ? " error" : " filled") : "");
-    cont.appendChild(d);
-  }
-}
-
-function renderKeypad() {
-  const keys = ["1","2","3","4","5","6","7","8","9","","0","DEL"];
-  const kp = document.getElementById("pin-keypad");
-  keys.forEach(k => {
-    const btn = document.createElement("button");
-    if (k === "") { btn.className = "key empty"; btn.disabled = true; }
-    else {
-      btn.className = "key" + (k === "DEL" ? " del" : "");
-      btn.textContent = k === "DEL" ? "⌫" : k;
-      btn.addEventListener("click", () => handlePin(k));
-    }
-    kp.appendChild(btn);
-  });
-}
-
-function handlePin(k) {
-  if (k === "DEL") {
-    pinValue = pinValue.slice(0, -1);
-    document.getElementById("pin-error").textContent = "";
-    renderDots(false); return;
-  }
-  pinValue += k;
-  renderDots(false);
-  if (pinValue.length === PIN_CORRECT.length) {
-    if (pinValue === PIN_CORRECT) {
-      unlock();
-    } else {
-      renderDots(true);
-      document.getElementById("pin-error").textContent = "PIN incorrecto";
-      const dots = document.getElementById("pin-dots");
-      dots.classList.add("shake");
-      setTimeout(() => {
-        pinValue = ""; renderDots(false);
-        dots.classList.remove("shake");
-        document.getElementById("pin-error").textContent = "";
-      }, 600);
-    }
-  }
-}
-
-function unlock() {
-  document.getElementById("pin-screen").style.display = "none";
-  document.getElementById("app").classList.add("visible");
-}
-
-function logout() {
-  pinValue = "";
-  renderDots(false);
-  document.getElementById("pin-error").textContent = "";
-  document.getElementById("pin-screen").style.display = "flex";
-  document.getElementById("app").classList.remove("visible");
-  newReceta();
-}
 
 /* ══ EYE ROWS ═════════════════════════════════════════════ */
 function buildEyeRow(containerId, prefix, labelText) {
@@ -619,8 +534,6 @@ function newReceta() {
 
 /* ══ INIT ══════════════════════════════════════════════════ */
 document.addEventListener("DOMContentLoaded", () => {
-  renderDots(false);
-  renderKeypad();
   buildEyeRow("row-od", "od", "O.D.");
   buildEyeRow("row-oi", "oi", "O.I.");
   buildChips("chips-specs", SPECS, () => selectedSpec, v => { selectedSpec = v; });
